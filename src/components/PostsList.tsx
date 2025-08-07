@@ -1,6 +1,7 @@
 import React from 'react';
 import { Post } from '../types/Post';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 type Props = {
   userPosts: Post[] | undefined;
@@ -64,4 +65,19 @@ export const PostsList: React.FC<Props> = ({
       </table>
     </div>
   );
+};
+
+PostsList.propTypes = {
+  userPosts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      userId: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      body: PropTypes.string.isRequired,
+    }).isRequired,
+  ),
+  selectTitle: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])])
+    .isRequired,
+  setSelectTitle: PropTypes.func.isRequired,
+  setStateCommentButton: PropTypes.func.isRequired,
 };

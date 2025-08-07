@@ -1,6 +1,7 @@
 import React from 'react';
 import { User } from '../types/User';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 type Props = {
   users: User[] | undefined;
@@ -8,9 +9,8 @@ type Props = {
   setSelect: React.Dispatch<React.SetStateAction<number | null>>;
   showUsers: boolean;
   setShowUsers: React.Dispatch<React.SetStateAction<boolean>>;
-  selectUser?: User;
+  selectUser?: User | undefined;
 };
-
 export const UserSelector: React.FC<Props> = ({
   users,
   select,
@@ -71,4 +71,26 @@ export const UserSelector: React.FC<Props> = ({
       </div>
     </div>
   );
+};
+
+UserSelector.propTypes = {
+  users: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
+    }).isRequired,
+  ),
+  select: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])])
+    .isRequired,
+  setSelect: PropTypes.func.isRequired,
+  showUsers: PropTypes.bool.isRequired,
+  setShowUsers: PropTypes.func.isRequired,
+  selectUser: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    phone: PropTypes.string.isRequired,
+  }).isRequired,
 };

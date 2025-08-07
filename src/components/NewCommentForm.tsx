@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { client } from '../utils/fetchClient';
 import { Post } from '../types/Post';
 import { Comment } from '../types/Comment';
+import PropTypes from 'prop-types';
 
 type Props = {
   post: Post | undefined;
@@ -222,4 +223,16 @@ export const NewCommentForm: React.FC<Props> = ({
       </div>
     </form>
   );
+};
+
+NewCommentForm.propTypes = {
+  post: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired,
+  }).isRequired,
+
+  setComments: PropTypes.func.isRequired,
+  setErrorIsSubmiting: PropTypes.func.isRequired,
 };
