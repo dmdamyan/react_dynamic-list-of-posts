@@ -1,13 +1,13 @@
 import React from 'react';
 import { Post } from '../types/Post';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 
 type Props = {
   userPosts: Post[] | undefined;
   selectTitle: number | null;
   setSelectTitle: React.Dispatch<React.SetStateAction<number | null>>;
   setStateCommentButton: React.Dispatch<React.SetStateAction<boolean>>;
+  // setStateAWriteAComment: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const PostsList: React.FC<Props> = ({
@@ -15,6 +15,7 @@ export const PostsList: React.FC<Props> = ({
   selectTitle,
   setSelectTitle,
   setStateCommentButton,
+  // setStateAWriteAComment,
 }) => {
   const handleToggle = (id: number) => {
     setSelectTitle(prev => (prev === id ? null : id));
@@ -54,6 +55,9 @@ export const PostsList: React.FC<Props> = ({
                   })}
                   onClick={() => {
                     handleToggle(userPost.id);
+                    setStateCommentButton(
+                      selectTitle === userPost.id ? true : false,
+                    );
                   }}
                 >
                   {selectTitle === userPost.id ? 'Close' : 'Open'}
@@ -65,19 +69,4 @@ export const PostsList: React.FC<Props> = ({
       </table>
     </div>
   );
-};
-
-PostsList.propTypes = {
-  userPosts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      userId: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      body: PropTypes.string.isRequired,
-    }).isRequired,
-  ),
-  selectTitle: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])])
-    .isRequired,
-  setSelectTitle: PropTypes.func.isRequired,
-  setStateCommentButton: PropTypes.func.isRequired,
 };

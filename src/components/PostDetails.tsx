@@ -4,7 +4,6 @@ import { NewCommentForm } from './NewCommentForm';
 import { Post } from '../types/Post';
 import { Comment } from '../types/Comment';
 import { client } from '../utils/fetchClient';
-import PropTypes from 'prop-types';
 
 type Props = {
   post: Post | undefined;
@@ -12,6 +11,8 @@ type Props = {
   setComments: React.Dispatch<React.SetStateAction<Comment[] | undefined>>;
   stateCommentButton: boolean;
   setStateCommentButton: React.Dispatch<React.SetStateAction<boolean>>;
+  // stateAWriteAComment: boolean;
+  // setStateAWriteAComment: React.Dispatch<React.SetStateAction<boolean>>;
   errorIsSubmiting: string;
   setErrorIsSubmiting: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -21,17 +22,23 @@ export const PostDetails: React.FC<Props> = ({
   comments,
   setComments,
   stateCommentButton,
+  // stateAWriteAComment,
   setStateCommentButton,
+  // setStateAWriteAComment,
   errorIsSubmiting,
   setErrorIsSubmiting,
 }) => {
   const handleDeleteComment = (id: number) => {
-    client
-      .delete(`/comments/${id}`)
-      .then(() => {
-        setComments(comments?.filter(coment => coment.id !== id));
-      })
-      .catch(() => {});
+    const originalComments = comments;
+
+    setComments(currentComments =>
+      currentComments?.filter(comment => comment.id !== id),
+    );
+
+    client.delete(`/comments/${id}`).catch(() => {
+      setComments(originalComments);
+      setErrorIsSubmiting('Failed to delete comment. Please try again.');
+    });
   };
 
   return (
@@ -97,14 +104,18 @@ export const PostDetails: React.FC<Props> = ({
                 </article>
               ))}
 
-              <button
-                data-cy="WriteCommentButton"
-                type="button"
-                className="button is-link"
-                onClick={() => setStateCommentButton(true)}
-              >
-                Write a comment
-              </button>
+              {!stateCommentButton && (
+                <button
+                  data-cy="WriteCommentButton"
+                  type="button"
+                  className="button is-link"
+                  onClick={() => {
+                    setStateCommentButton(true);
+                  }}
+                >
+                  Write a comment
+                </button>
+              )}
             </div>
           </>
         )}
@@ -119,29 +130,4 @@ export const PostDetails: React.FC<Props> = ({
       </div>
     </div>
   );
-};
-
-PostDetails.propTypes = {
-  post: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    userId: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired,
-  }).isRequired,
-
-  comments: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      postId: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-      body: PropTypes.string.isRequired,
-    }).isRequired,
-  ),
-
-  stateCommentButton: PropTypes.bool.isRequired,
-  errorIsSubmiting: PropTypes.string.isRequired,
-  setComments: PropTypes.func.isRequired,
-  setStateCommentButton: PropTypes.func.isRequired,
-  setErrorIsSubmiting: PropTypes.func.isRequired,
 };

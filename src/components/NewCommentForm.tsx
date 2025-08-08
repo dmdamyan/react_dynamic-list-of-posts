@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { client } from '../utils/fetchClient';
 import { Post } from '../types/Post';
 import { Comment } from '../types/Comment';
-import PropTypes from 'prop-types';
 
 type Props = {
   post: Post | undefined;
@@ -34,6 +33,13 @@ export const NewCommentForm: React.FC<Props> = ({
 
   const handleInputBody = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setBody(event?.target.value);
+  };
+
+  const completionOfSending = () => {
+    setBody('');
+    setErrorNameInput('');
+    setErrorEmailInput('');
+    setErrorBodyInput('');
   };
 
   const handleClear = () => {
@@ -68,7 +74,7 @@ export const NewCommentForm: React.FC<Props> = ({
 
             return [newComment];
           });
-          handleClear();
+          completionOfSending();
         })
         .catch(() => setErrorIsSubmiting('Something went wrong'))
         .finally(() => setIsSubmitting(false));
@@ -223,16 +229,4 @@ export const NewCommentForm: React.FC<Props> = ({
       </div>
     </form>
   );
-};
-
-NewCommentForm.propTypes = {
-  post: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    userId: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    body: PropTypes.string.isRequired,
-  }).isRequired,
-
-  setComments: PropTypes.func.isRequired,
-  setErrorIsSubmiting: PropTypes.func.isRequired,
 };

@@ -25,6 +25,7 @@ export const App = () => {
   const [showUsers, setShowUsers] = useState(false);
   const [selectTitle, setSelectTitle] = useState<number | null>(null);
   const [stateCommentButton, setStateCommentButton] = useState(false);
+  // const [stateAWriteAComment, setStateAWriteAComment] = useState(false);
   const [errorIsSubmiting, setErrorIsSubmiting] = useState('');
 
   useEffect(() => {
@@ -131,6 +132,7 @@ export const App = () => {
                     selectTitle={selectTitle}
                     setSelectTitle={setSelectTitle}
                     setStateCommentButton={setStateCommentButton}
+                    // setStateAWriteAComment={setStateAWriteAComment}
                   />
                 )}
               </div>
@@ -155,6 +157,8 @@ export const App = () => {
                 )}
                 stateCommentButton={stateCommentButton}
                 setStateCommentButton={setStateCommentButton}
+                // stateAWriteAComment={stateAWriteAComment}
+                // setStateAWriteAComment={setStateAWriteAComment}
                 setComments={setComments}
                 errorIsSubmiting={errorIsSubmiting}
                 setErrorIsSubmiting={setErrorIsSubmiting}
